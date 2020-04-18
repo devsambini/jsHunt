@@ -5,7 +5,9 @@ import './styles.css'
 export default class Main extends Component {
   // No React as variáveis devem ser criadas dentro do state
   state = {
-    products: []
+    products: [],
+    productInfo: {},
+    page: 1,
   }
 
 
@@ -16,17 +18,40 @@ export default class Main extends Component {
     this.loadProducts()
   }
   // Carregando os Produtos
-  loadProducts = async () => {
-    const response = await api.get('/products')
+  loadProducts = async (page = 1) => {
+    const response = await api.get(`/products?page=${page}`)
+
+    const { docs, ...productInfo } = response.data
 
     // Para preencher as variáveis utiliza-se o setState
-    this.setState({ products: response.data.docs })
-    
+    this.setState({ products: docs, productInfo, page })    
+  }
+
+  // Botões Anterior e Próximo
+
+  prevPage = () => {
+    const { page, productInfo } = this.state
+
+    if ( page === 1 ) return
+
+    const pagNumber = page - 1
+
+    this.loadProducts(pagNumber)
+  }
+
+  nextPage = () => {
+    const { page, productInfo } = this.state
+
+    if ( page === productInfo.pages ) return
+
+    const pageNumber = page + 1
+
+    this.loadProducts(pageNumber)
   }
 
   render() {
     // Desestruturação para buscar a variavel product la do this.state
-    const { products } = this.state
+    const { products, page, productInfo } = this.state
 
     // Para renderizar uma variavel utiliza-se { this.variavel }
     // O render fica escutando o state, e sempre que uma variavel é alterada ele atualiza automaticamente com o novo valor
@@ -41,6 +66,10 @@ export default class Main extends Component {
             <a href="#">Acessar</a>
           </article>
         ))}
+        <div className="actions">
+          <button disabled={page === 1} onClick={this.prevPage}>Anterior</button>
+          <button disabled={page === productInfo.pages} onClick={this.nextPage}>Próximo</button>
+        </div>
       </div>
     )
   }
