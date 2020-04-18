@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import api from '../../services/api'
+import { Link } from 'react-router-dom';
 import './styles.css'
 
 export default class Main extends Component {
@@ -30,7 +31,7 @@ export default class Main extends Component {
   // Botões Anterior e Próximo
 
   prevPage = () => {
-    const { page, productInfo } = this.state
+    const { page } = this.state
 
     if ( page === 1 ) return
 
@@ -63,7 +64,7 @@ export default class Main extends Component {
             <strong>{product.title}</strong>
             <p>{product.description}</p>
 
-            <a href="#">Acessar</a>
+            <Link to={`/products/${product._id}`}>Acessar</Link>
           </article>
         ))}
         <div className="actions">

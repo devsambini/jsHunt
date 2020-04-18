@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Routes from './routes'
 
 
 //CSS default
@@ -12,7 +12,7 @@ import Main from './pages/main';
 const App = () => (
   <div className="App">
     <Header />
-    <Main />
+    <Routes />
   </div>
 )
 
